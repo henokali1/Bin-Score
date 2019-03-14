@@ -31,25 +31,30 @@
             </div>
         </nav>
 
-            <!-- <br>
-            <h1 class="center">Leadboard</h1> -->
-            <!-- <h3 class="center">Scoreboard</h3> -->
                 {% for value in all_students %}
-                <div class="row card-panel" style="margin-left: 1px; margin-right: 1px;">
-                    <div class="col s2">
-                        <span style="font-family: 'Alfa Slab One', cursive; font-size: 80px; text-shadow: 14px 14px 14px #aaa; margin-right: 0px; padding-right: 0px;">{{loop.index}}.</span>
-                    </div>
-                    <div class="col s2" style="margin-left: 0px; padding-left: 0px;">
-                        <img src="{{url_for('static', filename='img/'+value.prof_img)}}" width="100" height="100" style="border-radius: 20%;" />
-                    </div>
-                    <div class="col s6" style="margin-top: 20px;">
-                        <span style="font-family: 'Righteous', cursive; font-size: 50px; text-shadow: 4px 4px 4px #aaa;">{{value.full_name[:17]|title}}</span>
-                    </div>
-                    <div class="col s2">
-                        <span style="font-family: 'Alfa Slab One', cursive; font-size: 80px; text-shadow: 14px 14px 14px #aaa;">{{value.score}}</span>
-                    </div>
-                </div>
                 {% endfor %}
+
+                <div class="card-panel">
+                    <table class="striped highlight">
+                        <thead>
+                            <tr>
+                                <th class="left">Rank</th>
+                                <th class="center">Name</th>
+                                <th class="right">Points</th>
+                            </tr>
+                        </thead>
+                
+                        <tbody>
+                            {% for value in all_students %}
+                            <tr>
+                                <td class="left">{{loop.index}}</td>
+                                <td class="center">{{value.full_name[:17]|title}}</td>
+                                <td class="right">{{value.score}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                </div>
         </div>
 
         <div style="padding:500px;"></div>
