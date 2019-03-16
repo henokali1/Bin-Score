@@ -87,7 +87,7 @@ def register():
         # Refresh the Leadboard Page
         socketio.emit('newnumber', {'number': 1}, namespace='/test')
         global msg
-        msg='{} Registered Successfully'.format(full_name)
+        msg = str(full_name) + ' Registered Successfully'
         return redirect(url_for('index')
     else:
         return render_template('register.html')
