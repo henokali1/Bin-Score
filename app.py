@@ -61,7 +61,6 @@ def index(msg=''):
     all_data = read_db()
     std_lst = [all_data[i] for i in all_data]
     srtd_lst = dict_srt(std_lst, 'score')
-    print('MSG: '.format(msg))
     return render_template('scoreboard.html', all_students=srtd_lst, msg=msg)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -86,8 +85,6 @@ def register():
         print('New Student Registered\nFull Name: {}    Gender: {}  Barcode: {}'.format(full_name, gender, barcode))
         # Refresh the Leadboard Page
         socketio.emit('newnumber', {'number': 1}, namespace='/test')
-        global msg
-        msg = str(full_name) + ' Registered Successfully'
         return redirect(url_for('index'))
     else:
         return render_template('register.html')
