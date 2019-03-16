@@ -163,7 +163,7 @@ class SecondThread(Thread):
             global cntr
             cntr += 1
             print(cntr)
-            update_score('985631', 1)
+            update_score('3424234', 1)
             sleep(self.delay)
             socketio.emit('newnumber', {'number': cntr}, namespace='/test')
 
