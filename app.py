@@ -171,9 +171,9 @@ class SecondThread(Thread):
         self.socket_thread()
 
 
-print("Starting Thread")
-thread = SecondThread()
-thread.start()
+# print("Starting Thread")
+# thread = SecondThread()
+# thread.start()
 
 if __name__ == '__main__':
     #webbrowser.open('http://127.0.0.1:5000/')
