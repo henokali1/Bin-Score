@@ -57,11 +57,11 @@ def save_db(barcode, full_name, gender, score=0, prof_img=None):
 
 
 @app.route('/')
-def index():
+def index(msg=''):
     all_data = read_db()
     std_lst = [all_data[i] for i in all_data]
     srtd_lst = dict_srt(std_lst, 'score')
-    return render_template('scoreboard.html', all_students=srtd_lst, msg='Student Added S')
+    return render_template('scoreboard.html', all_students=srtd_lst)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -85,7 +85,7 @@ def register():
         print('New Student Registered\nFull Name: {}    Gender: {}  Barcode: {}'.format(full_name, gender, barcode))
         # Refresh the Leadboard Page
         socketio.emit('newnumber', {'number': 1}, namespace='/test')
-        return redirect(url_for('index'))
+        return redirect(url_for('index', msg='{} Registered Successfully'.format(full_name)))
     else:
         return render_template('register.html')
 
