@@ -61,6 +61,7 @@ def index(msg=''):
     all_data = read_db()
     std_lst = [all_data[i] for i in all_data]
     srtd_lst = dict_srt(std_lst, 'score')
+    print('MSG: '.format(msg))
     return render_template('scoreboard.html', all_students=srtd_lst)
 
 @app.route('/register', methods=['GET', 'POST'])
