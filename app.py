@@ -163,7 +163,7 @@ class SecondThread(Thread):
             global cntr
             cntr += 1
             print(cntr)
-            update_score('3424234', 1)
+            update_score(barcode='5342344', val=1)
             sleep(self.delay)
             socketio.emit('newnumber', {'number': cntr}, namespace='/test')
 
@@ -171,9 +171,9 @@ class SecondThread(Thread):
         self.socket_thread()
 
 
-# print("Starting Thread")
-# thread = SecondThread()
-# thread.start()
+print("Starting Thread")
+thread = SecondThread()
+thread.start()
 
 if __name__ == '__main__':
     #webbrowser.open('http://127.0.0.1:5000/')
