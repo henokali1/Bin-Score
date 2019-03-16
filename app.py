@@ -88,7 +88,7 @@ def register():
         socketio.emit('newnumber', {'number': 1}, namespace='/test')
         global msg
         msg = str(full_name) + ' Registered Successfully'
-        return redirect(url_for('index')
+        return redirect(url_for('index'))
     else:
         return render_template('register.html')
 
