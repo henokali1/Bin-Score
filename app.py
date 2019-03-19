@@ -1,12 +1,14 @@
-from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, redirect, url_for, session, request, logging, json
-from time import sleep
+from flask_socketio import SocketIO, emit
+from werkzeug import secure_filename
 from threading import Thread, Event
-import json
+from pynput import keyboard
+from random import randint
+from time import sleep
 import webbrowser
 import operator
-from random import randint
-from werkzeug import secure_filename
+import _thread
+import json
 import time
 import os
 
@@ -14,13 +16,41 @@ import os
 UPLOAD_FOLDER = 'C:/Users/Henok/Documents/MEGA/MEGAsync/Projects/Garbage Bin Score/static/img'
 cntr = 0
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #turn the flask app into a socketio app
 socketio = SocketIO(app)
+
+
+barcode = ''
+def on_press(key):
+    try:
+        if (len(str(key)) == 3):
+            k = str(key)
+            global barcode
+            barcode += key.char
+        (key.char)
+    except AttributeError:
+        if(str(key) == 'Key.enter'):
+            print('Scanned Barcode: {}'.format(barcode))
+            global barcode
+            barcode = ''
+        else:
+            pass
+
+def on_release(key):
+    if key == keyboard.Key.esc:
+        # Stop listener
+        return False
+
+# Define a function for the thread
+def keybaord_listner_thread():
+   while 1:
+       # Collect events until released
+        with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+            listener.join()
 
 
 def get_th(rank):
@@ -49,9 +79,9 @@ def read_db():
     return data
 
 
-def save_db(barcode, full_name, gender, score=0, prof_img=None):
+def save_db(barcode, full_name, gender, score=0):
     existing_data = read_db()
-    existing_data[barcode] = {'full_name':full_name, 'gender':gender, 'score':score, 'prof_img':prof_img}
+    existing_data[barcode] = {'full_name':full_name, 'gender':gender, 'score':score}
     with open('student_db.txt', 'w') as outfile:  
         json.dump(existing_data, outfile)
 
@@ -70,17 +100,17 @@ def register():
         gender = request.form.get('gender')
         barcode = request.form.get('barcode')
 
-        try:
-            f = request.files['file']
-            u_file_name = str(time.time()) + f.filename
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], u_file_name))
-        except:
-            if gender == 'female':
-                u_file_name = 'female_profile_default.png'
-            else:
-                u_file_name = 'male_profile_default.png'
+        # try:
+        #     f = request.files['file']
+        #     u_file_name = str(time.time()) + f.filename
+        #     f.save(os.path.join(app.config['UPLOAD_FOLDER'], u_file_name))
+        # except:
+        #     if gender == 'female':
+        #         u_file_name = 'female_profile_default.png'
+        #     else:
+        #         u_file_name = 'male_profile_default.png'
         
-        save_db(barcode=barcode, full_name=full_name.title(), gender=gender, prof_img=u_file_name)
+        save_db(barcode=barcode, full_name=full_name.title(), gender=gender)
 
         print('New Student Registered\nFull Name: {}    Gender: {}  Barcode: {}'.format(full_name, gender, barcode))
         # Refresh the Leadboard Page
@@ -116,24 +146,24 @@ def edit_student(barcode):
         gender = request.form.get('gender')
         new_barcode = request.form.get('new_barcode')
  
-        try:
-            f = request.files['file']
-            u_file_name = str(time.time()) + f.filename   
-            print(u_file_name)         
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], u_file_name))
-            print('Phot changed')
-        except:
-            u_file_name = read_db()[str(barcode)]['prof_img']
-            print('No photo uploaded: {}'.format(u_file_name))
+        # try:
+        #     f = request.files['file']
+        #     u_file_name = str(time.time()) + f.filename   
+        #     print(u_file_name)         
+        #     f.save(os.path.join(app.config['UPLOAD_FOLDER'], u_file_name))
+        #     print('Phot changed')
+        # except:
+        #     u_file_name = read_db()[str(barcode)]['prof_img']
+        #     print('No photo uploaded: {}'.format(u_file_name))
         old_score = read_db()[str(barcode)]['score']
         del_student(barcode)
         save_db(
             barcode=new_barcode, full_name=full_name.title(),
-            gender=gender, score=old_score, prof_img=u_file_name,
+            gender=gender, score=old_score
         )
         
-        # print('New Barcode: {}  Old barcode:    {} \nFull Name: {}\nGender:{}'.format(new_barcode, barcode, full_name, gender))
-        # print('-----------------------------------------------')
+        print('New Barcode: {}  Old barcode:    {} \nFull Name: {}\nGender:{}'.format(new_barcode, barcode, full_name, gender))
+        print('-----------------------------------------------')
         # Refresh Leadboard Page
         socketio.emit('newnumber', {'number': 1}, namespace='/test')
         return redirect(url_for('admin'))
@@ -147,23 +177,18 @@ def update_score(barcode, val):
     with open('student_db.txt', 'w') as outfile:  
         json.dump(existing_data, outfile)
 
-
-class SecondThread(Thread):
+# Socket Thread
+class SocketThread(Thread):
     def __init__(self):
-        self.delay = 5
-        super(SecondThread, self).__init__()
+        self.delay = 1
+        super(SocketThread, self).__init__()
 
     def socket_thread(self):
-        """
-        Generate a random number every 1 second and emit to a socketio instance (broadcast)
-        Ideally to be run in a separate thread?
-        """
-        #infinite loop of magical random numbers
         while 1:
             global cntr
-            cntr += 1
+            cntr += 5
             #print(cntr)
-            update_score(barcode='5342344', val=1)
+            #update_score(barcode='5342344', val=1)
             sleep(self.delay)
             #socketio.emit('newnumber', {'number': cntr}, namespace='/test')
 
@@ -174,11 +199,23 @@ class SecondThread(Thread):
 
     def run(self):
         self.socket_thread()
+        
+
+# Start Socket Thread
+print('Starting Socket Thread')
+sock_thread = SocketThread()
+sock_thread.start()
 
 
-print("Starting Thread")
-thread = SecondThread()
-thread.start()
+# Start Keyboard Thread
+try:
+    print('Starting Keyboard Thread')
+    _thread.start_new_thread( keybaord_listner_thread, () )
+except:
+    print("Error: unable to start keyboard thread")
+
+while 1:
+    pass
 
 if __name__ == '__main__':
     #webbrowser.open('http://127.0.0.1:5000/')
