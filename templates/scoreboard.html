@@ -30,7 +30,7 @@
 
                 <ul id="nav-mobile" class="left">
                     <li>
-                    <a class="modal-trigger" href="#modal1">Bin</a>
+                    <a class="modal-trigger" href="#modal1">Bin Status</a>
                     </li>
                 </ul>
                 
@@ -72,8 +72,6 @@
                 <a class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
             </div>
         </div>
-
-                <div id="binFour"></div>
 
                 <div class="card-panel">
                     <table class="striped highlight">
@@ -156,11 +154,6 @@
                 fillBackgroundColor: '#a21ce0',
                 height: '35px'
             });
-            $('#binFour').LineProgressbar({
-                percentage: 0,
-                fillBackgroundColor: '#e01c5a',
-                height: '35px'
-            });
         });
     </script>
 
@@ -185,13 +178,6 @@
                     $('#binThree').LineProgressbar({
                         percentage: val,
                         fillBackgroundColor: '#a21ce0',
-                        height: '35px'
-                    });
-                    break;
-                case "4":
-                    $('#binFour').LineProgressbar({
-                        percentage: val,
-                        fillBackgroundColor: '#e01c5a',
                         height: '35px'
                     });
                     break;

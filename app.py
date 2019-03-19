@@ -163,9 +163,9 @@ class SocketThread(Thread):
             #socketio.emit('newnumber', {'number': cntr}, namespace='/test')
 
             stat_val = randint(0, 100)
-            bin_id = randint(1,4)
-            print('stat_val: {} Bin ID: {}'.format(stat_val, bin_id))
-            socketio.emit('bin_stat', {'bin_stat': stat_val, 'bin_id': str(bin_id)}, namespace='/test')
+            bin_id = randint(1,3)
+            # print('stat_val: {} Bin ID: {}'.format(stat_val, bin_id))
+            # socketio.emit('bin_stat', {'bin_stat': stat_val, 'bin_id': str(bin_id)}, namespace='/test')
     
     def run(self):
         self.socket_thread()
