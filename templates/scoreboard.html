@@ -74,7 +74,6 @@
         </div>
 
                 <div id="binFour"></div>
-                <button class='btn' onclick="setVal()">Set Val</button>
 
                 <div class="card-panel">
                     <table class="striped highlight">
@@ -116,21 +115,19 @@
             var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
             var numbers_received = [];
 
-            //receive details from server
+            //receive score from server
             socket.on('newnumber', function(msg) {
                 console.log("Received number" + msg.number);
-                alert(msg.number)
                 location.reload();
+            });
+
+
+            //receive bin status from server
+            socket.on('bin_stat', function(msg) {
+                console.log("Received Data: " + msg.bin_stat + "    Bid ID: " + msg.bin_id);
+                updateBinStat(msg.bin_id, msg.bin_stat)
+                //location.reload();
                 //maintain a list of ten numbers
-                if (numbers_received.length >= 10){
-                    numbers_received.shift()
-                }            
-                numbers_received.push(msg.number);
-                numbers_string = '';
-                for (var i = 0; i < numbers_received.length; i++){
-                    numbers_string = numbers_string + '<p>' + numbers_received[i].toString() + '</p>';
-                }
-                $('#log').html(numbers_string);
             });
 
 
@@ -140,28 +137,27 @@
                 inDuration: 300,
                 outDuration: 200,
                 ready: function (modal, trigger) {
-                console.log('Modal Opened', modal, trigger);
                 }
             });
 
             // Progressbar
             $('#binOne').LineProgressbar({
-                percentage: 56,
+                percentage: 0,
                 fillBackgroundColor: '#1eb6e0',
                 height: '35px'
             });
             $('#binTwo').LineProgressbar({
-                percentage: 36,
+                percentage: 0,
                 fillBackgroundColor: '#1d68e0',
                 height: '35px'
             });
             $('#binThree').LineProgressbar({
-                percentage: 86,
+                percentage: 0,
                 fillBackgroundColor: '#a21ce0',
                 height: '35px'
             });
             $('#binFour').LineProgressbar({
-                percentage: 86,
+                percentage: 0,
                 fillBackgroundColor: '#e01c5a',
                 height: '35px'
             });
@@ -169,21 +165,39 @@
     </script>
 
     <script>
-        function setVal(){
-            var val = parseInt(prompt(""))
-            if(val > 100){
-                val = 100
-            }
-            if(val < 0){
-                val = 0
-            }
-
-            console.log(val)
-            $('#binFour').LineProgressbar({
-                percentage: val,
-                fillBackgroundColor: '#e01c5a',
-                height: '35px'
-            });
+        function updateBinStat(binId, val){
+            switch(binId) {
+                case "1":
+                    $('#binOne').LineProgressbar({
+                        percentage: val,
+                        fillBackgroundColor: '#1eb6e0',
+                        height: '35px'
+                    });
+                    break;
+                case "2":
+                    $('#binTwo').LineProgressbar({
+                        percentage: val,
+                        fillBackgroundColor: '#1d68e0',
+                        height: '35px'
+                    });
+                    break;
+                case "3":
+                    $('#binThree').LineProgressbar({
+                        percentage: val,
+                        fillBackgroundColor: '#a21ce0',
+                        height: '35px'
+                    });
+                    break;
+                case "4":
+                    $('#binFour').LineProgressbar({
+                        percentage: val,
+                        fillBackgroundColor: '#e01c5a',
+                        height: '35px'
+                    });
+                    break;
+                default:
+                    text = "Wrong Bin ID";
+                }
         }
     </script>
 

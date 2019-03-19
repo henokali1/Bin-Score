@@ -159,21 +159,26 @@ class SecondThread(Thread):
         Ideally to be run in a separate thread?
         """
         #infinite loop of magical random numbers
-        while cntr < 10:
+        while 1:
             global cntr
             cntr += 1
-            print(cntr)
+            #print(cntr)
             update_score(barcode='5342344', val=1)
             sleep(self.delay)
-            socketio.emit('newnumber', {'number': cntr}, namespace='/test')
+            #socketio.emit('newnumber', {'number': cntr}, namespace='/test')
+
+            stat_val = randint(0, 100)
+            bin_id = randint(1,4)
+            print('stat_val: {} Bin ID: {}'.format(stat_val, bin_id))
+            socketio.emit('bin_stat', {'bin_stat': stat_val, 'bin_id': str(bin_id)}, namespace='/test')
 
     def run(self):
         self.socket_thread()
 
 
-# print("Starting Thread")
-# thread = SecondThread()
-# thread.start()
+print("Starting Thread")
+thread = SecondThread()
+thread.start()
 
 if __name__ == '__main__':
     #webbrowser.open('http://127.0.0.1:5000/')
