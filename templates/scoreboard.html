@@ -6,14 +6,10 @@
         
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}" media="screen,projection"/>
-        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"> -->
 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.lineProgressbar.min.css') }}">
 
 
-        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-        <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Scoreboard</title>
@@ -181,7 +177,7 @@
             if(val < 0){
                 val = 0
             }
-            
+
             console.log(val)
             $('#binFour').LineProgressbar({
                 percentage: val,
