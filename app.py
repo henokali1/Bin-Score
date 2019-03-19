@@ -2,9 +2,11 @@ from flask import Flask, render_template, redirect, url_for, session, request, l
 from flask_socketio import SocketIO, emit
 from werkzeug import secure_filename
 from threading import Thread, Event
+from pynput import keyboard
 from random import randint
 from time import sleep
 import webbrowser
+import threading
 import operator
 import json
 import time
@@ -21,6 +23,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #turn the flask app into a socketio app
 socketio = SocketIO(app)
 
+
+barcode = ''
 
 
 def get_th(rank):
@@ -164,12 +168,46 @@ class SocketThread(Thread):
 
             stat_val = randint(0, 100)
             bin_id = randint(1,3)
-            # print('stat_val: {} Bin ID: {}'.format(stat_val, bin_id))
-            # socketio.emit('bin_stat', {'bin_stat': stat_val, 'bin_id': str(bin_id)}, namespace='/test')
+            print('stat_val: {} Bin ID: {}'.format(stat_val, bin_id))
+            socketio.emit('bin_stat', {'bin_stat': stat_val, 'bin_id': str(bin_id)}, namespace='/test')
     
     def run(self):
         self.socket_thread()
         
+
+
+def on_press(key):
+    try:
+        if (len(str(key)) == 3):
+            k = str(key)
+            global barcode
+            barcode += key.char
+        (key.char)
+    except AttributeError:
+        if(str(key) == 'Key.enter'):
+            print(barcode)
+            #update_score(barcode=barcode, val=1)
+            global barcode
+            barcode = ''
+        else:
+            pass
+
+def on_release(key):
+    if key == keyboard.Key.esc:
+        # Stop listener
+        return False
+
+def key_list():
+    while 1:
+        # Collect events until released
+        with keyboard.Listener(
+                on_press=on_press,
+                on_release=on_release) as listener:
+            listener.join()
+            
+key_list_thread = threading.Thread(name='key_list', target=key_list)
+key_list_thread.start()
+
 
 # Start Socket Thread
 print('Starting Socket Thread')
