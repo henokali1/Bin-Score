@@ -7,6 +7,10 @@
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}" media="screen,projection"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.lineProgressbar.min.css') }}">
+
+
         <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
@@ -21,15 +25,36 @@
         <nav>
             <div class="nav-wrapper teal">
                 <!-- <div class="container"> -->
-                <a class="brand-logo center">Leadboard</a>
+                <a href="/" class="brand-logo center"><strong>Leadboard</strong></a>
                 <ul id="nav-mobile" class="right">
                     <li>
                     <a href="register">Register</a>
                     </li>
                 </ul>
+
+                <ul id="nav-mobile" class="left">
+                    <li>
+                    <a class="modal-trigger" href="#modal1">Modal</a>
+                    </li>
+                </ul>
+                
                 <!-- </div> -->
             </div>
         </nav>
+
+        <!-- MODAL -->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <h4 class="center">Modal Header</h4>
+                <div id="binOne"></div>
+                <div id="binTwo"></div>
+                <div id="binThree"></div>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+            </div>
+        </div>
+
 
                 <div class="card-panel">
                     <table class="striped highlight">
@@ -62,6 +87,8 @@
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/materialize.min.js') }}"></script>
     <!-- Socket IO -->
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/socket.io.min.js') }}"></script>
+    <!-- Progressbar -->
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.lineProgressbar.js') }}"></script>
 
     <script>
         $(document).ready(function () {
@@ -72,6 +99,7 @@
             //receive details from server
             socket.on('newnumber', function(msg) {
                 console.log("Received number" + msg.number);
+                alert(msg.number)
                 location.reload();
                 //maintain a list of ten numbers
                 if (numbers_received.length >= 10){
@@ -83,6 +111,33 @@
                     numbers_string = numbers_string + '<p>' + numbers_received[i].toString() + '</p>';
                 }
                 $('#log').html(numbers_string);
+            });
+
+            $('#binOne').LineProgressbar({
+                percentage: 56,
+                fillBackgroundColor: '#2b59b6',
+                height: '35px'
+            });
+            $('#binTwo').LineProgressbar({
+                percentage: 36,
+                fillBackgroundColor: '#f44245',
+                height: '35px'
+            });
+            $('#binThree').LineProgressbar({
+                percentage: 86,
+                fillBackgroundColor: '#42f453',
+                height: '35px'
+            });
+
+
+            // JAVASCRIPT START HERE //
+            $('.modal').modal({
+                dismissible: true,
+                inDuration: 300,
+                outDuration: 200,
+                ready: function (modal, trigger) {
+                console.log('Modal Opened', modal, trigger);
+                }
             });
         });
     </script>
