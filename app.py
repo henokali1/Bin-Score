@@ -2,12 +2,10 @@ from flask import Flask, render_template, redirect, url_for, session, request, l
 from flask_socketio import SocketIO, emit
 from werkzeug import secure_filename
 from threading import Thread, Event
-from pynput import keyboard
 from random import randint
 from time import sleep
 import webbrowser
 import operator
-import _thread
 import json
 import time
 import os
@@ -23,34 +21,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #turn the flask app into a socketio app
 socketio = SocketIO(app)
 
-
-barcode = ''
-def on_press(key):
-    try:
-        if (len(str(key)) == 3):
-            k = str(key)
-            global barcode
-            barcode += key.char
-        (key.char)
-    except AttributeError:
-        if(str(key) == 'Key.enter'):
-            print('Scanned Barcode: {}'.format(barcode))
-            global barcode
-            barcode = ''
-        else:
-            pass
-
-def on_release(key):
-    if key == keyboard.Key.esc:
-        # Stop listener
-        return False
-
-# Define a function for the thread
-def keybaord_listner_thread():
-   while 1:
-       # Collect events until released
-        with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
-            listener.join()
 
 
 def get_th(rank):
@@ -206,16 +176,6 @@ print('Starting Socket Thread')
 sock_thread = SocketThread()
 sock_thread.start()
 
-
-# Start Keyboard Thread
-try:
-    print('Starting Keyboard Thread')
-    _thread.start_new_thread( keybaord_listner_thread, () )
-except:
-    print("Error: unable to start keyboard thread")
-
-while 1:
-    pass
 
 if __name__ == '__main__':
     #webbrowser.open('http://127.0.0.1:5000/')
