@@ -6,7 +6,7 @@
         
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}" media="screen,projection"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"> -->
 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.lineProgressbar.min.css') }}">
 
@@ -34,7 +34,7 @@
 
                 <ul id="nav-mobile" class="left">
                     <li>
-                    <a class="modal-trigger" href="#modal1">Modal</a>
+                    <a class="modal-trigger" href="#modal1">Bin</a>
                     </li>
                 </ul>
                 
@@ -45,16 +45,40 @@
         <!-- MODAL -->
         <div id="modal1" class="modal">
             <div class="modal-content">
-                <h4 class="center">Modal Header</h4>
-                <div id="binOne"></div>
-                <div id="binTwo"></div>
-                <div id="binThree"></div>
+                <h4 class="center">Bin Status</h4>
+                <div class="row">
+                    <div style="margin-top:15px;" class="col s1">
+                        <span><strong>Bin #1</strong></span>
+                    </div>
+                    <div class="col s11">
+                        <div id="binOne"></div>
+                    </div>
+
+                    <div style="margin-top:15px;" class="col s1">
+                        <span><strong>Bin #2</strong></span>
+                    </div>
+                    <div class="col s11">
+                        <div id="binTwo"></div>
+                    </div>
+
+                    <div style="margin-top:15px;" class="col s1">
+                        <span><strong>Bin #3</strong></span>
+                    </div>
+                    <div class="col s11">
+                        <div id="binThree"></div>
+                    </div>
+                </div>
+                
+                
+                
             </div>
             <div class="modal-footer">
                 <a class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
             </div>
         </div>
 
+                <div id="binFour"></div>
+                <button class='btn' onclick="setVal()">Set Val</button>
 
                 <div class="card-panel">
                     <table class="striped highlight">
@@ -113,22 +137,6 @@
                 $('#log').html(numbers_string);
             });
 
-            $('#binOne').LineProgressbar({
-                percentage: 56,
-                fillBackgroundColor: '#2b59b6',
-                height: '35px'
-            });
-            $('#binTwo').LineProgressbar({
-                percentage: 36,
-                fillBackgroundColor: '#f44245',
-                height: '35px'
-            });
-            $('#binThree').LineProgressbar({
-                percentage: 86,
-                fillBackgroundColor: '#42f453',
-                height: '35px'
-            });
-
 
             // JAVASCRIPT START HERE //
             $('.modal').modal({
@@ -139,7 +147,48 @@
                 console.log('Modal Opened', modal, trigger);
                 }
             });
+
+            // Progressbar
+            $('#binOne').LineProgressbar({
+                percentage: 56,
+                fillBackgroundColor: '#1eb6e0',
+                height: '35px'
+            });
+            $('#binTwo').LineProgressbar({
+                percentage: 36,
+                fillBackgroundColor: '#1d68e0',
+                height: '35px'
+            });
+            $('#binThree').LineProgressbar({
+                percentage: 86,
+                fillBackgroundColor: '#a21ce0',
+                height: '35px'
+            });
+            $('#binFour').LineProgressbar({
+                percentage: 86,
+                fillBackgroundColor: '#e01c5a',
+                height: '35px'
+            });
         });
+    </script>
+
+    <script>
+        function setVal(){
+            var val = parseInt(prompt(""))
+            if(val > 100){
+                val = 100
+            }
+            if(val < 0){
+                val = 0
+            }
+            
+            console.log(val)
+            $('#binFour').LineProgressbar({
+                percentage: val,
+                fillBackgroundColor: '#e01c5a',
+                height: '35px'
+            });
+        }
     </script>
 
     {% if msg != '' %}
