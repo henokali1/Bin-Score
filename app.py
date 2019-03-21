@@ -13,19 +13,19 @@ import time
 import os
 
 
-UPLOAD_FOLDER = 'C:/Users/Henok/Documents/MEGA/MEGAsync/Projects/Garbage Bin Score/static/img'
+# UPLOAD_FOLDER = 'C:/Users/Henok/Documents/MEGA/MEGAsync/Projects/Garbage Bin Score/static/img'
 cntr = 0
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #turn the flask app into a socketio app
 socketio = SocketIO(app)
 
 
 barcode = ''
-
+last_scan = 0.0
 
 def get_th(rank):
     if rank == '1':
@@ -175,7 +175,6 @@ class SocketThread(Thread):
         self.socket_thread()
         
 
-
 def on_press(key):
     try:
         if (len(str(key)) == 3):
@@ -185,7 +184,7 @@ def on_press(key):
         (key.char)
     except AttributeError:
         if(str(key) == 'Key.enter'):
-            print(barcode)
+            print('Scanned Barcode: {}'.format(barcode))
             #update_score(barcode=barcode, val=1)
             global barcode
             barcode = ''
@@ -204,15 +203,17 @@ def key_list():
                 on_press=on_press,
                 on_release=on_release) as listener:
             listener.join()
-            
+
+# Start Keyboard Listner Thread
+print('Starting Keyboard Listner Thread')            
 key_list_thread = threading.Thread(name='key_list', target=key_list)
 key_list_thread.start()
 
 
 # Start Socket Thread
-print('Starting Socket Thread')
-sock_thread = SocketThread()
-sock_thread.start()
+# print('Starting Socket Thread')
+# sock_thread = SocketThread()
+# sock_thread.start()
 
 
 if __name__ == '__main__':
