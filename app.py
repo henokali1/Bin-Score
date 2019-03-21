@@ -4,10 +4,12 @@ from werkzeug import secure_filename
 from threading import Thread, Event
 from pynput import keyboard
 from random import randint
+from gpiozero import LED
 from time import sleep
 import webbrowser
 import threading
 import operator
+import serial
 import json
 import time
 import os
@@ -23,6 +25,8 @@ app.config['DEBUG'] = True
 #turn the flask app into a socketio app
 socketio = SocketIO(app)
 
+ardu_pin = LED(21)
+plc.on()
 
 barcode = ''
 last_scan = 0.0
@@ -185,6 +189,8 @@ def on_press(key):
     except AttributeError:
         if(str(key) == 'Key.enter'):
             print('Scanned Barcode: {}'.format(barcode))
+            # TO-DO Verify that barcode exists in database
+            ardu_pin.off()
             #update_score(barcode=barcode, val=1)
             global barcode
             barcode = ''
