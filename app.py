@@ -9,27 +9,31 @@ from time import sleep
 import webbrowser
 import threading
 import operator
-import serial
 import json
 import time
 import os
 
 
-# UPLOAD_FOLDER = 'C:/Users/Henok/Documents/MEGA/MEGAsync/Projects/Garbage Bin Score/static/img'
 cntr = 0
-
+drop_delay = 10
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-#turn the flask app into a socketio app
 socketio = SocketIO(app)
 
 ardu_pin = LED(21)
-plc.on()
+ardu_pin.on()
 
 barcode = ''
 last_scan = 0.0
+
+prev_bin_data = {"1":'', "2":'', "3":''}
+
+
+def read_bin_db():
+    with open('bin_data.txt') as json_file:  
+        data = json.load(json_file)
+    return data
 
 def get_th(rank):
     if rank == '1':
@@ -78,16 +82,6 @@ def register():
         gender = request.form.get('gender')
         barcode = request.form.get('barcode')
 
-        # try:
-        #     f = request.files['file']
-        #     u_file_name = str(time.time()) + f.filename
-        #     f.save(os.path.join(app.config['UPLOAD_FOLDER'], u_file_name))
-        # except:
-        #     if gender == 'female':
-        #         u_file_name = 'female_profile_default.png'
-        #     else:
-        #         u_file_name = 'male_profile_default.png'
-        
         save_db(barcode=barcode, full_name=full_name.title(), gender=gender)
 
         print('New Student Registered\nFull Name: {}    Gender: {}  Barcode: {}'.format(full_name, gender, barcode))
@@ -124,15 +118,6 @@ def edit_student(barcode):
         gender = request.form.get('gender')
         new_barcode = request.form.get('new_barcode')
  
-        # try:
-        #     f = request.files['file']
-        #     u_file_name = str(time.time()) + f.filename   
-        #     print(u_file_name)         
-        #     f.save(os.path.join(app.config['UPLOAD_FOLDER'], u_file_name))
-        #     print('Phot changed')
-        # except:
-        #     u_file_name = read_db()[str(barcode)]['prof_img']
-        #     print('No photo uploaded: {}'.format(u_file_name))
         old_score = read_db()[str(barcode)]['score']
         del_student(barcode)
         save_db(
@@ -154,6 +139,7 @@ def update_score(barcode, val):
     existing_data[str(barcode)]['score'] = old_score + int(val)
     with open('student_db.txt', 'w') as outfile:  
         json.dump(existing_data, outfile)
+    socketio.emit('newnumber', {'number': 1}, namespace='/test')
 
 # Socket Thread
 class SocketThread(Thread):
@@ -163,20 +149,24 @@ class SocketThread(Thread):
 
     def socket_thread(self):
         while 1:
-            global cntr
-            cntr += 5
             #print(cntr)
             #update_score(barcode='5342344', val=1)
             sleep(self.delay)
             #socketio.emit('newnumber', {'number': cntr}, namespace='/test')
 
-            stat_val = randint(0, 100)
-            bin_id = randint(1,3)
-            print('stat_val: {} Bin ID: {}'.format(stat_val, bin_id))
-            socketio.emit('bin_stat', {'bin_stat': stat_val, 'bin_id': str(bin_id)}, namespace='/test')
-    
+            bin_data = read_bin_db()
+            print('bin_data: {}'.format(bin_data))
+            for i in bin_data:
+                if i != 'score':
+                    try:
+                        socketio.emit('bin_stat', {'bin_stat': bin_data[i]['val'], 'bin_id': i}, namespace='/test')
+                        time.sleep(2)
+                    except:
+                        print('Error x001')
+
     def run(self):
         self.socket_thread()
+
         
 
 def on_press(key):
@@ -189,8 +179,28 @@ def on_press(key):
     except AttributeError:
         if(str(key) == 'Key.enter'):
             print('Scanned Barcode: {}'.format(barcode))
+            
+            ex_data = read_db()
+            if barcode in ex_data:
+                print('Data Exists')
+                global cntr
+                cntr = time.time()
+                while(time.time()-cntr <= drop_delay):
+                    ardu_pin.off()
+                    print(time.time()-cntr)
+                    time.sleep(1)
+                ardu_pin.on()
+
+                new_score = read_bin_db()['last_score']['score']
+                print('new_score: {}    barcode: {}'.format(new_score, barcode))
+                
+                update_score(barcode=barcode, val=new_score)
+                socketio.emit('newnumber', {'number': 1}, namespace='/test')
+
+            else:
+            	print('unknown barcode')
             # TO-DO Verify that barcode exists in database
-            ardu_pin.off()
+            
             #update_score(barcode=barcode, val=1)
             global barcode
             barcode = ''
@@ -210,18 +220,22 @@ def key_list():
                 on_release=on_release) as listener:
             listener.join()
 
+	
+
+# Start Socket Thread
+print('Starting Socket Thread')
+sock_thread = SocketThread()
+sock_thread.start()
+
 # Start Keyboard Listner Thread
 print('Starting Keyboard Listner Thread')            
 key_list_thread = threading.Thread(name='key_list', target=key_list)
 key_list_thread.start()
 
 
-# Start Socket Thread
-# print('Starting Socket Thread')
-# sock_thread = SocketThread()
-# sock_thread.start()
+
 
 
 if __name__ == '__main__':
-    #webbrowser.open('http://127.0.0.1:5000/')
+    webbrowser.open('http://127.0.0.1:5000/')
     socketio.run(app)

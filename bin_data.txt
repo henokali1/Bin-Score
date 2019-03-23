@@ -1,0 +1,1 @@
+{"last_score": {"score": "0"}, "1": {"val": "93", "bin_num": "1"}, "3": {"val": "90", "bin_num": "3"}, "2": {"val": "52", "bin_num": "2"}}
