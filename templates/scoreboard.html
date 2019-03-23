@@ -9,6 +9,7 @@
 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.lineProgressbar.min.css') }}">
 
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -73,6 +74,20 @@
             </div>
         </div>
 
+        <!-- Count Down Timer Modal -->
+        <!-- MODAL -->
+        <div id="modal2" class="modal">
+            <div class="modal-content">
+                <h4 class="center">Please Wait...</h4>
+                <div class="cntr-container"></div>
+                
+                
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+            </div>
+        </div>
+
                 <div class="card-panel">
                     <table class="striped highlight">
                         <thead>
@@ -107,6 +122,10 @@
     <!-- Progressbar -->
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.lineProgressbar.js') }}"></script>
 
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/d3.min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/index.js') }}"></script>
+
     <script>
         $(document).ready(function () {
             //connect to the socket server.
@@ -122,7 +141,7 @@
 
             //receive bin status from server
             socket.on('bin_stat', function(msg) {
-                console.log("Received Data: " + msg.bin_stat + "    Bid ID: " + msg.bin_id);
+                //console.log("Received Data: " + msg.bin_stat + "    Bid ID: " + msg.bin_id);
                 updateBinStat(msg.bin_id, msg.bin_stat)
                 //location.reload();
                 //maintain a list of ten numbers
@@ -137,6 +156,28 @@
                 ready: function (modal, trigger) {
                 }
             });
+
+            $('#modal2').modal();
+
+
+
+            // Count Down timer (TEST)
+            socket.on('timerTest', function(msg) {
+                console.log("Received Data: " + msg.timerTest);
+                if(msg.timerTest == 'open'){
+                    timePassed = 0
+                    console.log('Start Count Down',timePassed)
+
+                    $('#modal2').modal('open'); 
+                }
+
+                if(msg.timerTest == 'close'){
+                    timePassed = 0
+                    console.log('Start Count Down', timePassed)
+                    $('#modal2').modal('close'); 
+                }
+            });
+
 
             // Progressbar
             $('#binOne').LineProgressbar({

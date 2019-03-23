@@ -221,6 +221,14 @@ def key_list():
             listener.join()
 
 	
+def timer_test():
+	while 1:
+		print('Start timer socket')
+		socketio.emit('timerTest', {'timerTest': 'open'}, namespace='/test')
+		time.sleep(10)
+		socketio.emit('timerTest', {'timerTest': 'close'}, namespace='/test')
+		time.sleep(3)
+
 
 # Start Socket Thread
 print('Starting Socket Thread')
@@ -233,6 +241,10 @@ key_list_thread = threading.Thread(name='key_list', target=key_list)
 key_list_thread.start()
 
 
+# Start Timer Thread
+print('Starting Timer Thread')
+tmr_thread = threading.Thread(name='timer_test', target=timer_test)
+tmr_thread.start()
 
 
 
