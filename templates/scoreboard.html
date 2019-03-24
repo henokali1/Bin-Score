@@ -199,30 +199,41 @@
         
         window.setInterval(sendAjaxReq, 1000);
 
-
+        bin1_last = ''
+        bin2_last = ''
+        bin3_last = ''
 
         function updateBinStat(binId, val){
             switch(binId) {
                 case "1":
-                    $('#binOne').LineProgressbar({
-                        percentage: val,
-                        fillBackgroundColor: '#1eb6e0',
-                        height: '35px'
-                    });
+                    if(bin1_last != val){
+                        $('#binOne').LineProgressbar({
+                            percentage: val,
+                            fillBackgroundColor: '#1eb6e0',
+                            height: '35px'
+                        });
+                        bin1_last = val
+                    }
                     break;
                 case "2":
-                    $('#binTwo').LineProgressbar({
-                        percentage: val,
-                        fillBackgroundColor: '#1d68e0',
-                        height: '35px'
-                    });
+                    if(bin2_last != val){
+                        $('#binTwo').LineProgressbar({
+                            percentage: val,
+                            fillBackgroundColor: '#1d68e0',
+                            height: '35px'
+                        });
+                        bin2_last = val
+                    }
                     break;
                 case "3":
-                    $('#binThree').LineProgressbar({
-                        percentage: val,
-                        fillBackgroundColor: '#a21ce0',
-                        height: '35px'
-                    });
+                    if(bin3_last != val){
+                        $('#binThree').LineProgressbar({
+                            percentage: val,
+                            fillBackgroundColor: '#a21ce0',
+                            height: '35px'
+                        });
+                        bin3_last = val
+                    }
                     break;
                 default:
                     text = "Wrong Bin ID";
