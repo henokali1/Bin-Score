@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, request, logging, json
+from flask import Flask, render_template, redirect, url_for, session, request, logging, json, jsonify
 from flask_socketio import SocketIO, emit
 from werkzeug import secure_filename
 from threading import Thread, Event
@@ -28,7 +28,7 @@ barcode = ''
 last_scan = 0.0
 
 prev_bin_data = {"1":'', "2":'', "3":''}
-
+start_cntr = False
 
 def read_bin_db():
     with open('bin_data.txt') as json_file:  
@@ -97,6 +97,11 @@ def admin():
     return render_template('admin.html', all_students=read_db())
 
 
+@app.route('/counter', methods=['GET'])
+def counter():
+    return render_template('counter.html')
+
+
 @app.route('/del/<string:barcode>', methods=['GET', 'POST'])
 def del_student(barcode):
     try:
@@ -133,6 +138,13 @@ def edit_student(barcode):
     else:
         return render_template('edit.html', stud_info=read_db()[str(barcode)], barcode=str(barcode))
 
+@app.route('/_add_numbers')
+def add_numbers():
+    a = request.args.get('a', 0, type=int)
+    b = request.args.get('b', 0, type=int)
+    return jsonify(result=start_cntr)
+
+
 def update_score(barcode, val):
     existing_data = read_db()
     old_score = existing_data[str(barcode)]['score']
@@ -149,7 +161,7 @@ class SocketThread(Thread):
 
     def socket_thread(self):
         while 1:
-            #print(cntr)
+            print('start_cntr',start_cntr)
             #update_score(barcode='5342344', val=1)
             sleep(self.delay)
             #socketio.emit('newnumber', {'number': cntr}, namespace='/test')
@@ -185,11 +197,15 @@ def on_press(key):
                 print('Data Exists')
                 global cntr
                 cntr = time.time()
+                global start_cntr
+                start_cntr = True
                 while(time.time()-cntr <= drop_delay):
                     ardu_pin.off()
                     print(time.time()-cntr)
                     time.sleep(1)
                 ardu_pin.on()
+                global start_cntr
+                start_cntr = False
 
                 new_score = read_bin_db()['last_score']['score']
                 print('new_score: {}    barcode: {}'.format(new_score, barcode))
@@ -220,14 +236,6 @@ def key_list():
                 on_release=on_release) as listener:
             listener.join()
 
-	
-def timer_test():
-	while 1:
-		print('Start timer socket')
-		socketio.emit('timerTest', {'timerTest': 'open'}, namespace='/test')
-		time.sleep(10)
-		socketio.emit('timerTest', {'timerTest': 'close'}, namespace='/test')
-		time.sleep(3)
 
 
 # Start Socket Thread
@@ -240,11 +248,6 @@ print('Starting Keyboard Listner Thread')
 key_list_thread = threading.Thread(name='key_list', target=key_list)
 key_list_thread.start()
 
-
-# Start Timer Thread
-print('Starting Timer Thread')
-tmr_thread = threading.Thread(name='timer_test', target=timer_test)
-tmr_thread.start()
 
 
 

@@ -74,20 +74,6 @@
             </div>
         </div>
 
-        <!-- Count Down Timer Modal -->
-        <!-- MODAL -->
-        <div id="modal2" class="modal">
-            <div class="modal-content">
-                <h4 class="center">Please Wait...</h4>
-                <div class="cntr-container"></div>
-                
-                
-            </div>
-            <div class="modal-footer">
-                <a class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
-            </div>
-        </div>
-
                 <div class="card-panel">
                     <table class="striped highlight">
                         <thead>
@@ -115,6 +101,8 @@
 
     <!--Import jQuery -->
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery-3.2.1.min.js') }}"></script>
+    <!-- Ajax -->
+    <script src="{{ url_for('static', filename = 'js/ajax-jquery.min.js') }}"></script>
     <!-- Materialize -->
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/materialize.min.js') }}"></script>
     <!-- Socket IO -->
@@ -124,10 +112,11 @@
 
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/d3.min.js') }}"></script>
 
-    <script type="text/javascript" src="{{ url_for('static', filename = 'js/index.js') }}"></script>
-
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename = 'js/index.js') }}"></script>
+ -->
     <script>
         $(document).ready(function () {
+
             //connect to the socket server.
             var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
             var numbers_received = [];
@@ -135,14 +124,24 @@
             //receive score from server
             socket.on('newnumber', function(msg) {
                 console.log("Received number" + msg.number);
-                location.reload();
+                //location.reload();
             });
 
 
             //receive bin status from server
             socket.on('bin_stat', function(msg) {
-                //console.log("Received Data: " + msg.bin_stat + "    Bid ID: " + msg.bin_id);
+                console.log("Received Data: " + msg.bin_stat + "    Bid ID: " + msg.bin_id);
                 updateBinStat(msg.bin_id, msg.bin_stat)
+                //location.reload();
+                //maintain a list of ten numbers
+            });
+
+            // Start Counter
+            socket.on('cntr', function(msg) {
+                console.log("Received Data: " + msg.cntr);
+                if(msg.cntr == 'start'){
+                    window.open("http://127.0.0.1:5000/counter","_self")
+                }
                 //location.reload();
                 //maintain a list of ten numbers
             });
@@ -157,26 +156,10 @@
                 }
             });
 
-            $('#modal2').modal();
 
 
 
-            // Count Down timer (TEST)
-            socket.on('timerTest', function(msg) {
-                console.log("Received Data: " + msg.timerTest);
-                if(msg.timerTest == 'open'){
-                    timePassed = 0
-                    console.log('Start Count Down',timePassed)
-
-                    $('#modal2').modal('open'); 
-                }
-
-                if(msg.timerTest == 'close'){
-                    timePassed = 0
-                    console.log('Start Count Down', timePassed)
-                    $('#modal2').modal('close'); 
-                }
-            });
+            
 
 
             // Progressbar
@@ -199,6 +182,25 @@
     </script>
 
     <script>
+        function sendAjaxReq(){
+            $.getJSON('http://127.0.0.1:5000/_add_numbers', {
+          }, function(data) {
+            var start_counter = data.result
+            console.log('start_counter',start_counter)
+            if(start_counter){
+                window.open("http://127.0.0.1:5000/counter","_self")
+            }
+            //setTimeout(checkCntr(), 300);
+            
+          });
+          return false;
+        }
+
+        
+        window.setInterval(sendAjaxReq, 1000);
+
+
+
         function updateBinStat(binId, val){
             switch(binId) {
                 case "1":
