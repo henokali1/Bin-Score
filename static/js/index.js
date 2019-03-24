@@ -115,6 +115,7 @@ function destroyTimer() {
     .each("end", function() {
       field.selectAll("path").remove()
     }); 
+    window.open("http://127.0.0.1:5000/","_self")
 }
 
 function arcTween(b) {
