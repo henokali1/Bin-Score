@@ -39,6 +39,7 @@ def save_score_data(val):
 	existing_data['last_score'] = {'score':val}
 	with open('bin_data.txt', 'w') as outfile:
 		json.dump(existing_data, outfile)
+	print('im called .................')
 
 
 
