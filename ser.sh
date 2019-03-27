@@ -4,7 +4,9 @@
 
 cd /
 cd home/pi/Desktop/Bin-Score
-python3 serial_data.py & python3 app.py & chromium-browser --app=http://127.0.0.1:5000/ --start-fullscreen
-
+#chromium-browser --app=http://127.0.0.1:5000/ --start-fullscreen
+python3 serial_data.py
+python3 app.py
 
 cd /
+

@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, session, request, logging, json, jsonify
+from pynput.keyboard import Key, Controller
 from flask_socketio import SocketIO, emit
 from werkzeug import secure_filename
 from threading import Thread, Event
@@ -29,7 +30,7 @@ last_scan = 0.0
 
 prev_bin_data = {"1":'', "2":'', "3":''}
 start_cntr = False
-
+msg = ''
 def read_bin_db():
     with open('bin_data.txt') as json_file:  
         data = json.load(json_file)
@@ -69,11 +70,14 @@ def save_db(barcode, full_name, gender, score=0):
 
 
 @app.route('/')
-def index(msg=''):
+def index():
+    msgg = msg
+    global msg
+    msg = ''
     all_data = read_db()
     std_lst = [all_data[i] for i in all_data]
     srtd_lst = dict_srt(std_lst, 'score')
-    return render_template('scoreboard.html', all_students=srtd_lst, msg=msg)
+    return render_template('scoreboard.html', all_students=srtd_lst, msg=msgg)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -210,6 +214,8 @@ def on_press(key):
                 new_score = read_bin_db()['last_score']['score']
                 print('new_score: {}    barcode: {}'.format(new_score, barcode))
                 
+                global msg
+                msg = 'You Got {} Points'.format(new_score)
                 update_score(barcode=barcode, val=new_score)
                 socketio.emit('newnumber', {'number': 1}, namespace='/test')
 
@@ -252,5 +258,5 @@ key_list_thread.start()
 
 
 if __name__ == '__main__':
-    webbrowser.open('http://127.0.0.1:5000/')
+    #webbrowser.open('http://127.0.0.1:5000/')
     socketio.run(app)
