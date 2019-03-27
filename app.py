@@ -215,7 +215,11 @@ def on_press(key):
                 print('new_score: {}    barcode: {}'.format(new_score, barcode))
                 
                 global msg
-                msg = 'You Got {} Points'.format(new_score)
+                if int(new_score) > 1:
+                    msg = 'Congratulations, you scored {} point'.format(new_score)
+                else:
+                    msg = 'Congratulations, you scored {} points'.format(new_score)
+
                 update_score(barcode=barcode, val=new_score)
                 socketio.emit('newnumber', {'number': 1}, namespace='/test')
 
