@@ -1,7 +1,7 @@
 var width = 400,
   height = 400,
   timePassed = 0,
-  timeLimit = 10;
+  timeLimit = 30;
 
 var fields = [{
   value: timeLimit,

@@ -16,7 +16,7 @@ import os
 
 
 cntr = 0
-drop_delay = 10
+drop_delay = 30
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
