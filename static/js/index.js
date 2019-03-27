@@ -58,7 +58,7 @@ var label = field.append("text")
     .duration(500)
     .attrTween("d", arcTween);
 
-  if ((timeLimit - timePassed) <= 10)
+  if ((timeLimit - timePassed) <= 30)
     pulseText();
   else
     label

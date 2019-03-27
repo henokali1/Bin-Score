@@ -214,11 +214,15 @@ def on_press(key):
                 new_score = read_bin_db()['last_score']['score']
                 print('new_score: {}    barcode: {}'.format(new_score, barcode))
                 
-                global msg
+                
                 if int(new_score) > 1:
-                    msg = 'Congratulations, you scored {} point'.format(new_score)
+                    global msg
+                    msg = 'Congratulations, you scored ' + new_score + ' point'
+                    #msg = new_score
                 else:
-                    msg = 'Congratulations, you scored {} points'.format(new_score)
+                    global msg
+                    #msg = new_score
+                    msg = 'Congratulations, you scored ' + new_score + ' points'
 
                 update_score(barcode=barcode, val=new_score)
                 socketio.emit('newnumber', {'number': 1}, namespace='/test')
