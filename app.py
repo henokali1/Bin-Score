@@ -16,7 +16,7 @@ import os
 
 
 cntr = 0
-drop_delay = 30
+drop_delay = 10
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
@@ -215,7 +215,7 @@ def on_press(key):
                 print('new_score: {}    barcode: {}'.format(new_score, barcode))
                 
                 
-                if int(new_score) > 1:
+                if int(new_score) == 1:
                     global msg
                     msg = 'Congratulations, you scored ' + new_score + ' point'
                     #msg = new_score

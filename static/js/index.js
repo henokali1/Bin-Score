@@ -1,7 +1,7 @@
 var width = 400,
   height = 400,
   timePassed = 0,
-  timeLimit = 30;
+  timeLimit = 10;
 
 var fields = [{
   value: timeLimit,
@@ -58,7 +58,7 @@ var label = field.append("text")
     .duration(500)
     .attrTween("d", arcTween);
 
-  if ((timeLimit - timePassed) <= 30)
+  if ((timeLimit - timePassed) <= 10)
     pulseText();
   else
     label
