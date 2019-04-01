@@ -1,5 +1,4 @@
 from flask import Flask, render_template, redirect, url_for, session, request, logging, json, jsonify
-from ser_com_list import serial_ports as sp
 from pynput.keyboard import Key, Controller
 from flask_socketio import SocketIO, emit
 from werkzeug import secure_filename
@@ -11,21 +10,9 @@ from time import sleep
 import webbrowser
 import threading
 import operator
-import serial
 import json
 import time
 import os
-
-
-# Get com port
-# ser = serial.Serial(
-#  port=sp()[0],
-#  baudrate = 9600,
-#  parity=serial.PARITY_NONE,
-#  stopbits=serial.STOPBITS_ONE,
-#  bytesize=serial.EIGHTBITS,
-#  timeout=0.050
-# )
 
 
 cntr = 0
@@ -66,8 +53,8 @@ def dict_srt(dict_val, srt_by):
     return r[::-1]
 
 def del_db_data():
-	with open('student_db.txt', 'w') as outfile:
-		json.dump({}, outfile)
+    with open('student_db.txt', 'w') as outfile:
+        json.dump({}, outfile)
 
 def read_db():
     with open('student_db.txt') as json_file:  
@@ -220,39 +207,14 @@ def on_press(key):
                     ardu_pin.off()
                     print(time.time()-cntr)
                     time.sleep(1)
-
                 ardu_pin.on()
-
-                # ser = serial.Serial(port=sp()[0], 9600, timeout=0.050)
-                # while ser.in_waiting:  # Or: while ser.inWaiting():
-                #     x=str(ser.readline(), 'utf-8').split(',')
-                #     print('Score: ',x)
-
-
-                    # if x[1] == 's':
-                    #     print('Score: {}'.format(x[0]))
-                    #     new_score = x[0]
-                    #     print('new_score: {}    barcode: {}'.format(new_score, barcode))
-                        
-                    #     if int(new_score) == 1:
-                    #         global msg
-                    #         msg = 'Congratulations, you scored ' + new_score + ' point'
-                    #         #msg = new_score
-                    #     else:
-                    #         global msg
-                    #         #msg = new_score
-                    #         msg = 'Congratulations, you scored ' + new_score + ' points'
-
-                    #     update_score(barcode=barcode, val=new_score)
-                    #     socketio.emit('newnumber', {'number': 1}, namespace='/test')
-
-
-
                 global start_cntr
                 start_cntr = False
-                time.sleep(1)
-                
 
+                time.sleep(2.5)
+                new_score = read_bin_db()['last_score']['score']
+                print('new_score: {}    barcode: {}'.format(new_score, barcode))
+                
                 
                 if int(new_score) == 1:
                     global msg
@@ -264,10 +226,10 @@ def on_press(key):
                     msg = 'Congratulations, you scored ' + new_score + ' points'
 
                 update_score(barcode=barcode, val=new_score)
-                socketio.emit('newnumber', {'number': 1}, namespace='/test')
+                # socketio.emit('newnumber', {'number': 1}, namespace='/test')
 
             else:
-            	print('unknown barcode')
+                print('unknown barcode')
             # TO-DO Verify that barcode exists in database
             
             #update_score(barcode=barcode, val=1)
