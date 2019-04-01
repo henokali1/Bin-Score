@@ -220,6 +220,9 @@ def on_press(key):
                     global msg
                     msg = 'Congratulations, you scored ' + new_score + ' point'
                     #msg = new_score
+                elif int(new_score) == 0:
+                    global msg
+                    msg = ''
                 else:
                     global msg
                     #msg = new_score
