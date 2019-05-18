@@ -8,3 +8,11 @@ def post_data(request, d):
 
 def t(request):
 	return HttpResponse("return this string")
+
+def score_bord(request):
+	args={}
+	return render(request, 'bin/score_bord.html', args)
+
+def counter(request):
+	args = {}
+	return render(request, 'bin/counter.html', args)
