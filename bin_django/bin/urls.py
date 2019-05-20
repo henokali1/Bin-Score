@@ -7,5 +7,5 @@ urlpatterns = [
     path('counter/', views.counter),
     path('pd/<str:d>/', views.post_data),
     path('t/', views.t),
-    path('a/', views.a),
+    path('bin_stat/', views.bin_stat),
 ]

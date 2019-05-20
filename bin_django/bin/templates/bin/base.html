@@ -20,11 +20,6 @@
 </head>
 
 <body>
-    
-    <!-- <button class="right" onclick="fullScreen()">Full Screen</button> 
-        <br>
-        <br>
-        -->
         <div id="cont" class="container">
         <nav>
             <div class="nav-wrapper teal">
@@ -46,44 +41,9 @@
             </div>
         </nav>
 
-        <!-- MODAL -->
-        <div id="modal1" class="modal">
-            <div class="modal-content">
-                <h4 class="center">Bin Status</h4>
-                <div class="row">
-                    <div style="margin-top:15px;" class="col s1">
-                        <span><strong>Bin #1</strong></span>
-                    </div>
-                    <div class="col s11">
-                        <div id="binOne"></div>
-                    </div>
-
-                    <div style="margin-top:15px;" class="col s1">
-                        <span><strong>Bin #2</strong></span>
-                    </div>
-                    <div class="col s11">
-                        <div id="binTwo"></div>
-                    </div>
-
-                    <div style="margin-top:15px;" class="col s1">
-                        <span><strong>Bin #3</strong></span>
-                    </div>
-                    <div class="col s11">
-                        <div id="binThree"></div>
-                    </div>
-                </div>
-                
-                
-                
-            </div>
-            <div class="modal-footer">
-                <a class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-            </div>
-        </div>
 
         </div>
 
-        <div style="padding:50px;"></div>
 
     {% block content %}
     {% endblock content %}
@@ -104,6 +64,11 @@
     <!-- Progressbar -->
     <script src="{% static "bin/js/jquery.lineProgressbar.js" %}" type="text/javascript"></script>
     <script src="{% static "bin/js/fontawesome-all.js" %}" type="text/javascript"></script>
+    {% if msg != '' %}
+    <script>
+        Materialize.toast('{{ msg }}', 8000, 'rounded');
+    </script>
+    {% endif %}
     {% block script_tag %}
 
     {% endblock script_tag %}

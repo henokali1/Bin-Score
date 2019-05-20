@@ -1,8 +1,7 @@
 {% extends 'bin/base.html' %}
 {% load static %}
 {% block link_tag %}
-
-    <link rel="stylesheet" href="{% static "bin/css/style.css" %}">
+<link rel="stylesheet" href="{% static "bin/css/style.css" %}">
 {% endblock link_tag %}
 {% block title %}Please Wait....{% endblock title %}
 
@@ -10,7 +9,9 @@
 {% block content %}
 <h4 class="center">Please Wait...</h4>
 <br>
-<div class="cntr-container"></div>
+<div class="content center">
+	<div class="cntr-container"></div>
+</div>
 {% endblock content %}
 
 {% block script_tag %}
