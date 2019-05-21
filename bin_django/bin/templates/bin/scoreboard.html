@@ -4,25 +4,25 @@
 
 
 {% block content %}
-                <div class="card-panel">
-                    <table class="striped highlight">
-                        <thead>
-                            <tr>
-                                <th class="left">Rank</th>
-                                <th class="center">Name</th>
-                                <th class="right">Points</th>
-                            </tr>
-                        </thead>
-                
-                        <tbody>
-                        	{% for i in all_stds %}
-                            <tr>
-                                <td class="left">{{forloop.counter}}.</td>
-                                <td class="center">{{i.full_name}}</td>
-                                <td class="right">{{i.score}}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        </table>
-                </div>
+            <div class="card-panel">
+                <table class="striped highlight">
+                    <thead>
+                        <tr>
+                            <th class="left">Rank</th>
+                            <th class="center">Name</th>
+                            <th class="right">Points</th>
+                        </tr>
+                    </thead>
+            
+                    <tbody>
+                    	{% for i in all_stds %}
+                        <tr>
+                            <td class="left">{{forloop.counter}}.</td>
+                            <td class="center">{{i.full_name}}</td>
+                            <td class="right">{{i.score}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+            </div>
 {% endblock content %}

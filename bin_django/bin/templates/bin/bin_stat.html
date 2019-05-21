@@ -1,30 +1,32 @@
 {% extends 'bin/base.html' %}
 {% load static %}
+{% block link_tag %}
+<link rel="stylesheet" type="text/css" href="{% static "bin/css/jquerysctipttop.css" %}" media="screen,projection" />
+{% endblock link_tag %}
 {% block title %} Bin Status {% endblock title %}
 
 {% block content %}
 <h4 class="center">Bin Status</h4>
-                
-                
-                
+<svg id="container1"></svg><br>
+<br><br>
+<svg id="container2"></svg><br>
+<br><br>
+
+    <svg id="container3"></svg>
 {% endblock content %}
 
 {% block script_tag %}
-    <script>
-        $(document).ready(function () {
-        });
-    </script>
-
-        <script type="text/javascript">
-      var progress = $("#container").Progress({
-        percent: 20,
+<script src="{% static "bin/js/jquery.progress.js" %}" type="text/javascript"></script>
+    <script type="text/javascript">
+      var progress = $("#container1").Progress({
+        percent: 50,
         width: 350,
         height: 40,
         fontSize: 16
       });
 
-      var progress1 = $("#container1").Progress({
-        percent: 50,
+      var progress1 = $("#container2").Progress({
+        percent: 10,
         width: 350,
         height: 40,
 		barColor:'#46CFB0',
@@ -32,19 +34,27 @@
         increaseSpeed: 2
       });
 
-      var progress2 = $("#container2").Progress({
-        percent: 70,
+      var progress2 = $("#container3").Progress({
+        percent: 90,
         width: 350,
         height: 40,
 		barColor:'#5E9DE6',
         fontSize: 16,
         animate: false
       });
-
-      setTimeout(function(){
-        progress.percent(90);
-        progress1.percent(90);
-        progress2.percent(90);
-      }, 4000);
     </script>
+  </div><script type="text/javascript">
+
+  // var _gaq = _gaq || [];
+  // _gaq.push(['_setAccount', 'UA-36251023-1']);
+  // _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  // _gaq.push(['_trackPageview']);
+
+  // (function() {
+  //   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  //   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  //   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  // })();
+
+</script>
 {% endblock script_tag %}
