@@ -40,7 +40,8 @@ def counter(request):
 	return render(request, 'bin/counter.html', args)
 
 def bin_stat(request):
-	args = {}
+	us_dist = UsDistance.objects.all()[0]
+	args = {'us_dist': us_dist}
 	return render(request, 'bin/bin_stat.html', args)
 
 def start_cntr(request, std_id):

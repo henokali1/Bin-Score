@@ -19,14 +19,14 @@
 <script src="{% static "bin/js/jquery.progress.js" %}" type="text/javascript"></script>
     <script type="text/javascript">
       var progress = $("#container1").Progress({
-        percent: 50,
+        percent: {{us_dist.us_one}},
         width: 350,
         height: 40,
         fontSize: 16
       });
 
       var progress1 = $("#container2").Progress({
-        percent: 10,
+        percent: {{us_dist.us_two}},
         width: 350,
         height: 40,
 		barColor:'#46CFB0',
@@ -35,7 +35,7 @@
       });
 
       var progress2 = $("#container3").Progress({
-        percent: 90,
+        percent: {{us_dist.us_three}},
         width: 350,
         height: 40,
 		barColor:'#5E9DE6',
