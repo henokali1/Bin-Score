@@ -4,14 +4,6 @@ from .models import *
 import time
 
 
-def post_data(request, d):
-    # MsoCns.objects.filter(pk=pk).delete()
-    r = 'Incoming: ' + d
-    return HttpResponse(r)
-
-def t(request):
-	return HttpResponse("return this string")
-
 def scoreboard(request):
 	scanned_id = CurrentId.objects.all().filter(pk=1)[0]
 	score = ArduScore.objects.all().filter(pk=1)[0]
@@ -43,6 +35,14 @@ def bin_stat(request):
 	us_dist = UsDistance.objects.all()[0]
 	args = {'us_dist': us_dist}
 	return render(request, 'bin/bin_stat.html', args)
+
+def post_bin_stat(request, bin1, bin2, bin3):
+	UsDistance.objects.filter(pk=1).update(
+		us_one = bin1,
+		us_two = bin2,
+		us_three = bin3,
+		)
+	return HttpResponse(str(bin1) + '-' + str(bin2) + '-' + str(bin3))
 
 def start_cntr(request, std_id):
 	CurrentId.objects.filter(pk=1).update(
