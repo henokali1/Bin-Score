@@ -3,25 +3,37 @@ from django.http import HttpResponse
 from .models import *
 import time
 
+# Verifys ID Num posted time stamp
+def verify_id_ts():
+	scanned_id_ts_obj = CurrentId.objects.all().filter(pk=1)[0]
+	scanned_id_ts = scanned_id_ts_obj.current_ts
+	time_diff = int(time.time()) - scanned_id_ts
+	print('c_ts - scanned_id_ts', time_diff)
+	return time_diff < 15
 
 def scoreboard(request):
 	scanned_id = CurrentId.objects.all().filter(pk=1)[0]
+	print('verify_id_ts', verify_id_ts())
 	score = ArduScore.objects.all().filter(pk=1)[0]
 	score = score.score
 	scanned_id = scanned_id.id_num
-	if score != 0 and score > 1:
-		msg = 'Congratulations, you have scored ' + str(score) + ' points!'
-	elif score == 1:
-		msg = msg = 'Congratulations, you have scored 1 point!'
+	if verify_id_ts():
+		if score != 0 and score > 1:
+			msg = 'Congratulations, you have scored ' + str(score) + ' points!'
+		elif score == 1:
+			msg = msg = 'Congratulations, you have scored 1 point!'
+		else:
+			msg = 'You have scored 0 points!'
 	else:
-		msg = 'You have scored 0 points!'
+		msg = ''
 
 	# Update Score on the DB
 	stdt = Student.objects.filter(id_num=scanned_id)[0]
 	priv_score = stdt.score
 	print('Priv Score', priv_score)
-
-	Student.objects.filter(id_num=scanned_id).update(score=score+priv_score)
+	if verify_id_ts():
+		Student.objects.filter(id_num=scanned_id).update(score=score+priv_score)
+	
 	all_stds = Student.objects.all().order_by('-score')
 	args={'all_stds': all_stds, 'msg': msg,}
 	print(scanned_id, score)
