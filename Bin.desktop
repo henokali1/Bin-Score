@@ -2,6 +2,6 @@
 [Desktop Entry]
 Name=Bin
 Comment=Bin
-Exec=sh /home/pi/Desktop/Bin-Score/launcher.sh
+Exec=sh /home/pi/Bin-Score/launcher.sh
 Terminal=true
 Type=Application
