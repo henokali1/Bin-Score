@@ -4,8 +4,11 @@ from selenium import webdriver
 from pynput import keyboard
 from gpiozero import LED
 from time import sleep
+import urllib.request
 import threading
 import time
+import ast
+
 
 
 ardu_pin = LED(21)
@@ -21,6 +24,14 @@ PATH_TO_DRIVER = '/home/pi/Downloads/chromedriver'
 browser = webdriver.Chrome(PATH_TO_DRIVER)
 browser.get(scoreboard_url)
 
+# Returns all regestered ID numbers from DB
+def get_all_ids():
+    f = urllib.request.urlopen("http://46.101.144.34:9000/bin/get_all_ids/")
+    all_ids = f.read()
+    all_ids = all_ids.decode("utf-8")
+
+    all_ids = ast.literal_eval(all_ids)
+    return all_ids
 
 def on_press(key):
     try:
@@ -33,11 +44,15 @@ def on_press(key):
         if(str(key) == 'Key.enter'):
             print('Scanned Barcode: {}'.format(barcode))
             # verify if scanned id existes in DB
-            if barcode == '1234':
-            	ardu_pin.off()
-            	browser.get(counter_url)
-            	sleep(10)
-            	ardu_pin.on()
+            all_ids = get_all_ids()
+            print('DB all_ids', all_ids)
+            if barcode in all_ids:
+                f = urllib.request.urlopen("http://46.101.144.34:9000/bin/start_cntr/{}/".format(barcode))
+                print(f.read())
+                ardu_pin.off()
+                browser.get(counter_url)
+                sleep(10)
+                ardu_pin.on()
             else:
             	print('Unknown Barcode(ID)')
 
