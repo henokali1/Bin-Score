@@ -2,3 +2,5 @@
 nohup.out
 bin_django/db.sqlite3
 bin_django/bin/__pycache__/*
+db.sqlite3
+
