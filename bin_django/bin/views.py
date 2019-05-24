@@ -3,6 +3,16 @@ from django.http import HttpResponse
 from .models import *
 import time
 
+
+# Returns a list of all registerd ID num's in the DB
+def get_all_ids(request):
+	ids=[]
+	stdt_obj = Student.objects.all()
+	for i in stdt_obj:
+		ids.append(str(i.id_num))
+	ids = str(ids)
+	return HttpResponse(str(ids))
+
 # Verifys ID Num posted time stamp
 def verify_id_ts():
 	scanned_id_ts_obj = CurrentId.objects.all().filter(pk=1)[0]
