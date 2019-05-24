@@ -7,5 +7,5 @@ cd /home/pi/Bin-Score
 
 # python3 serial_data.py & python3 app.py & chromium-browser --app=http://127.0.0.1:5000/ --start-fullscreen
 #chromium-browser --app=http://127.0.0.1:5000/ --start-fullscreen
-python3 play_ground.py
+sudo python3 key_listner.py
 #cd /
