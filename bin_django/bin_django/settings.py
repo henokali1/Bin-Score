@@ -32,7 +32,7 @@ SECRET_KEY = '&bwcgi(&3cj=&v(jah@by()-5!sc11e=sb0yu26&=fq3i@h7#c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '46.101.144.34', 'sh-flask', 'c27f029d0431']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
