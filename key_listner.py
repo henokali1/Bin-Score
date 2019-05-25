@@ -21,8 +21,10 @@ scoreboard_url = 'http://46.101.144.34:9000/bin/scoreboard/'
 counter_url = 'http://46.101.144.34:9000/bin/counter/'
 # open chrome (/scoreboard)
 PATH_TO_DRIVER = '/home/pi/Downloads/chromedriver'
+browser = webdriver.ChromeOptions()
+browser.add_argument("--kiosk")
+driver = webdriver.Chrome(chrome_options=browser)
 browser = webdriver.Chrome(PATH_TO_DRIVER)
-browser.fullscreen_window()
 browser.get(scoreboard_url)
 
 # Returns all regestered ID numbers from DB
