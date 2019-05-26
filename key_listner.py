@@ -1,3 +1,4 @@
+from selenium.webdriver.chrome.options import Options
 from pynput.keyboard import Key, Controller
 from threading import Thread, Event
 from selenium import webdriver
@@ -20,11 +21,20 @@ barcode = ''
 scoreboard_url = 'http://46.101.144.34:9000/bin/scoreboard/'
 counter_url = 'http://46.101.144.34:9000/bin/counter/'
 # open chrome (/scoreboard)
+chrome_options = Options()
+
+
 PATH_TO_DRIVER = '/home/pi/Downloads/chromedriver'
-browser = webdriver.ChromeOptions()
-browser.add_argument("--kiosk")
-driver = webdriver.Chrome(chrome_options=browser)
-browser = webdriver.Chrome(PATH_TO_DRIVER)
+
+
+chrome_options = webdriver.ChromeOptions()
+# Disable Info Bar
+chrome_options.add_argument("--disable-infobars")
+
+browser = webdriver.Chrome(executable_path=PATH_TO_DRIVER, chrome_options=chrome_options,)
+# browser.fullscreen_window()
+
+
 browser.get(scoreboard_url)
 
 # Returns all regestered ID numbers from DB
@@ -57,7 +67,7 @@ def on_press(key):
                 sleep(10)
                 ardu_pin.on()
             else:
-            	print('Unknown Barcode(ID)')
+                print('Unknown Barcode(ID)')
 
             # start counter(/counter)
 
