@@ -79,3 +79,7 @@ def post_score(request, score):
 		current_ts = str(int(time.time())),
 		)
 	return HttpResponse(score)
+
+def reg(request):
+	args = {}
+	return render(request, 'bin/reg.html', args)

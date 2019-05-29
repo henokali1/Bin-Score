@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('scoreboard/', views.scoreboard),
     path('counter/', views.counter),
+    path('register/', views.reg),
     path('bin_stat/', views.bin_stat),
     path('get_all_ids/', views.get_all_ids),
     path('post_score/<int:score>/', views.post_score),
