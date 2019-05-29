@@ -82,4 +82,18 @@ def post_score(request, score):
 
 def reg(request):
 	args = {}
+	if request.method == 'POST':
+		new_student = Student()
+		full_name = request.POST['full_name']
+		new_student.full_name = full_name
+		new_student.id_num = request.POST['barcode']
+		
+		msg = 'Welcome, {}'.format(full_name) + '! You are registered successfully!!'
+		args['msg']=msg
+		args['all_stds'] = Student.objects.all().order_by('-score')
+
+		# Save to DB
+		new_student.save()
+		return render(request, 'bin/scoreboard.html', args)
+
 	return render(request, 'bin/reg.html', args)
