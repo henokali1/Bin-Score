@@ -3,7 +3,6 @@
   
 {% block title %}Register{% endblock %}  
 {% block link_tag %}
-      <link rel="stylesheet" href="{% static "bin/css/bootstrap.min.css" %}">
       <link rel="stylesheet" href="{% static "bin/css/k_style.css" %}">
 {% endblock link_tag %}
 
@@ -11,7 +10,6 @@
 <br>
 <br>
 <!------------boşluk bitti--------------->
-<div class="card-panel grey lighten-3 grey-text text-darken-4 z-depth-5">
 <div class="container">
   <h3 class="center">Register</h3>
   <form method="POST" action="" enctype="multipart/form-data">
@@ -36,16 +34,14 @@
     <br>
     <div class="row">
 
-      <div class="col s6">
+      <!-- <div class="col s6">
         <a data-toggle="collapse" data-parent="#accordion" href="#virtualkeyboard" class="left waves-effect waves-light"><i class="material-icons">keyboard</i>Keyboard</a>
-      </div>
+      </div> -->
 
+      <button class="btn-large large waves-effect waves-light right" type="submit" name="action">Register
+          <i class="material-icons right">send</i>
+      </button>
 
-      <div class="col s6">
-          <button class="btn-large large waves-effect waves-light right" type="submit" name="action">Register
-              <i class="material-icons right">send</i>
-          </button>
-      </div>
     </div>
 
   </div>
@@ -124,19 +120,13 @@
 </div>
 
 </div>
-</div>
 
 
 
 <!----------login bitti----->
 
 <!------------boşluk--------------------->
-<div class="container">
- <div class="row">
-   <div class=" col-sm-2 col-md-2 col-lg-1" style="padding:50px;">
-    </div>
- </div>    
-</div> 
+
 <!------------boşluk bitti--------------->
   {% endblock content %}
 
