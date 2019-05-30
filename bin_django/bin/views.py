@@ -97,3 +97,7 @@ def reg(request):
 		return render(request, 'bin/scoreboard.html', args)
 
 	return render(request, 'bin/reg.html', args)
+
+def a(request):
+	args = {}
+	return render(request, 'bin/a.html', args)
